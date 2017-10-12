@@ -1,9 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>let</title>
+    <title>变量的解构赋值</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
+    <pre></pre>
   </body>
+  <script id="script">
+    // array
+    let [a, b, c] = [1, 2, [111]]
+    let {a1, b1, c1: c11} = {a1: 22, b: '123', c1: 22}
+    const f1 = () => {
+      console.log('f1')
+      return 11
+    }
+    const f2 = (name) => {
+      console.log(name, 'init')
+    }
+    let {a2 = f2('a2'), b2 = f2('b2')} = {b2: 132}
+    const fn1 = (num = f1()) => {
+      console.log(`num is ${num}`)
+    }
+  </script>
+  <script>
+    const $ = (str) => document.querySelector(str)
+    $('pre').innerHTML = $('#script').innerHTML
+  </script>
 </html>
