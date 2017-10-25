@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Proxy</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <pre></pre>
+  </body>
+  <script id="script">
+    /*
+     *  proxy
+     */
+    let obj = new Proxy({}, {
+      get(target, key, receiver) {
+        console.log(`getting ${key}`)
+        return Reflect.get(target, key, receiver)
+      },
+      set(target, key, value, receiver) {
+        console.log(`setting ${key}`)
+        return Reflect.set(target, key, value, receiver)
+      }
+    })
+  </script>
+  <script>
+    const $ = (str) => document.querySelector(str)
+    $('pre').innerHTML = $('#script').innerHTML
+  </script>
+</html>
