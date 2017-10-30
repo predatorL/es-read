@@ -21,6 +21,9 @@
         return Reflect.set(target, key, value, receiver)
       }
     })
+    /*
+    proxy 可代理 get|set|apply|call|has|construct( new )|deleteProperty|defineProperty|enumerate ...
+    */
   </script>
   <script>
     const $ = (str) => document.querySelector(str)

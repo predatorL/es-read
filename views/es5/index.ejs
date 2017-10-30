@@ -92,7 +92,7 @@
       "page": "reference"
     }
   ]
-  let createHref = item => `<a href="/pages/es6/${item.page}">${item.title}</a>`
+  let createHref = item => `<a href="/pages/es5/${item.page}">${item.title}</a>`
   document.querySelector('#catalog').innerHTML = catalog.map(createHref).join('')
 </script>
 

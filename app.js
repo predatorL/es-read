@@ -19,13 +19,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// route api
-var R_es6 = require('./routes/es6');
-var apis = require('./apis');
+// routes
+var routes_es6 = require('./routes/es6');
+var routes_es5 = require('./routes/es5');
 app.get('/', function(req, res, next) {
   res.render('index');
 })
-app.use('/pages/es6', R_es6);
+app.use('/pages/es6', routes_es6);
+app.use('/pages/es5', routes_es5);
+//  api
+var apis = require('./apis');
 app.use('/apis', apis);
 
 // catch 404 and forward to error handler
