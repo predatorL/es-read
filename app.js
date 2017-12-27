@@ -5,11 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -19,17 +20,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// routes
-var routes_es6 = require('./routes/es6');
-var routes_es5 = require('./routes/es5');
 app.get('/', function(req, res, next) {
   res.render('index');
 })
-app.use('/pages/es6', routes_es6);
-app.use('/pages/es5', routes_es5);
-//  api
-var apis = require('./apis');
-app.use('/apis', apis);
+app.use('/pages/es6', require('./routes/es6'));
+app.use('/pages/es5', require('./routes/es5'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
