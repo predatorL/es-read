@@ -21,7 +21,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res, next) {
-  res.render('index');
+  res.render('index', {
+      title: 'es-read'
+  });
 })
 app.use('/pages/es6', require('./routes/es6'));
 app.use('/pages/es5', require('./routes/es5'));

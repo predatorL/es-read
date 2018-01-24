@@ -1,25 +1,17 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>字符串的扩展</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <pre></pre>
-  </body>
-  <script id="script">
+<pre>
+    <code></code>
+</pre>
+<script id="script">
     /*
      *  let与const
      *  不存在变量提升, 不会产生undefined的问题
      *  (块级作用域)可以产生暂时性死区, 该区域内机制重复声明
-     *  const声明必须初始化 
+     *  const声明必须初始化
      *  let与const声明的变量不属于全局变量
      */
 
 
-  </script>
-  <script>
-    const $ = (str) => document.querySelector(str)
-    $('pre').innerHTML = $('#script').innerHTML
-  </script>
-</html>
+</script>
+<script>
+    __Utils.mountCode('pre code', '#script')
+</script>
