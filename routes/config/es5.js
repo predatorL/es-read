@@ -1,5 +1,3 @@
-
-
 let catalog = [
     {
         name: '变量和作用域',
@@ -10,36 +8,40 @@ let catalog = [
         page: 'referenceType'
     },
     {
-        name: '面向对象的程序设计',
-        page: 'Object_Oriented'
+        name: '对象',
+        page: 'Object'
+    },
+    {
+        name: '数组',
+        page: 'Array'
     },
     {
         name: '函数表达式',
-        page: 'function'
+        page: 'Function'
     },
     {
-        name: '浏览器对象模型',
-        page: 'BOM'
+        name: '**canvas',
+        page: 'Canvas'
     },
     {
-        name: '*文档对象模型',
-        page: 'DOM'
+        name: '****Web Workers',
+        page: 'webWorker'
+    },
+    {
+        name: '****File API',
+        page: 'File_API'
+    },
+    {
+        name: '**Geolocation API',
+        page: 'Geolocation'
     },
     {
         name: '*事件',
         page: 'event'
     },
     {
-        name: '**canvas',
-        page: 'canvas'
-    },
-    {
         name: 'HTML5 脚本编程',
         page: 'HTML5'
-    },
-    {
-        name: 'JSON',
-        page: 'JSON'
     },
     {
         name: '*Ajax 与 Comet',
@@ -52,20 +54,7 @@ let catalog = [
     {
         name: '***离线应用与客户端存储',
         page: 'application_cache__storge'
-    },
-    {
-        name: '**Geolocation API',
-        page: 'Geolocation_API'
-    },
-    {
-        name: '****File API',
-        page: 'File_API'
-    },
-    {
-        name: '****Web Workers',
-        page: 'Web_Workers'
-    },
-
+    }
 ]
 
 module.exports = catalog.map((item, index) => {

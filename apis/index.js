@@ -1,16 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const router = require('express').Router()
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.send('index');
-});
+router.use('/es5', require('./es5'))
 
-// generator
-router.get('/generator', function(req, res, next) {
-  setTimeout(_ => {
-    res.send('generator');
-  }, 200)
-});
+router.use('/es6', require('./es6'))
 
-module.exports = router;
+module.exports = router

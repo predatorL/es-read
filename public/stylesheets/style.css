@@ -10,3 +10,7 @@ a {
 #catalog a {
     display: block;
 }
+
+template.template {
+    display: none;
+}

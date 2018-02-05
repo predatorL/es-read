@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>{{title}}</title>
     {{!-- lib --}}
+    <script src="/lib/vue/vue.min.js"></script>
+    <link rel='stylesheet' href='/lib/element-ui/index.css' />
+    <script src="/lib/element-ui/index.js"></script>
     <link rel="stylesheet" href="/lib/highlight/arta.css">
     <script src="/lib/highlight/highlight.js"></script>
-    <script >hljs.initHighlightingOnLoad();</script>
-    {{!-- custom --}}
+    <script>hljs.initHighlightingOnLoad();</script> {{!-- custom --}}
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="/js/utils.js"></script>
-  </head>
-  <body>
-      {{{body}}}
-  </body>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    {{{body}}}
+</body>
+
 </html>

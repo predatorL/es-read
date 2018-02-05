@@ -1,4 +1,5 @@
 window.$ = str => document.querySelector(str)
+window.$all = str => document.querySelectorAll(str)
 window.__Utils = {}
 // args: target, source | Array([[target, source], [target, source]])
 __Utils.mountCode = (...args) => {
