@@ -6,4 +6,12 @@ router.get('/', function(req, res, next) {
     })
 })
 
+
+router.get('/socket', function(req, res, next) {
+    res.send({
+        state: 111
+    })
+})
+
+
 module.exports = router

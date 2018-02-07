@@ -36,6 +36,10 @@ let catalog = [
         page: 'Geolocation'
     },
     {
+        name: '*****Web Sockets',
+        page: 'Web_Sockets'
+    },
+    {
         name: '*事件',
         page: 'event'
     },

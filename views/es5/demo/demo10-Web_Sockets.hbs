@@ -1,0 +1,29 @@
+<template class="template">
+    <el-row :gutter="20">
+        <el-col :span="12">
+
+        </el-col>
+        <el-col :span="12">
+
+        </el-col>
+    </el-row>
+</template>
+<script>
+    new Vue({
+        el: '#app',
+        template: $('.template').innerHTML,
+        methods: {
+            onSubmit() {
+                this.worker.postMessage(this.form)
+            }
+        },
+        mounted() {
+            // const socket = new WebSocket("ws://127.0.0.1:3041/demo/es5/worker/test1.js");
+        },
+        data() {
+            return {
+                table: []
+            }
+        }
+    })
+</script>

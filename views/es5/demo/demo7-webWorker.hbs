@@ -16,7 +16,7 @@
             </el-form>
         </el-col>
         <el-col :span="12">
-            <el-table :data="table" style="width: 100%"　height="240">
+            <el-table :data="table" style="width: 100%" 　height="240">
                 <el-table-column prop="name" label="名称" width="60">
                 </el-table-column>
                 <el-table-column prop="type" label="类型" width="100">
@@ -31,7 +31,7 @@
     </el-row>
 </template>
 <script>
-    const types = Array.apply(null, {length: 6}).map((a, i) => {
+    const types = Array.apply(null, { length: 6 }).map((a, i) => {
         return {
             label: `类型${i}`,
             val: i
@@ -43,7 +43,7 @@
         methods: {
             onMsg(event) {
                 console.log('onMsg', event)
-                const {data} = event
+                const { data } = event
                 data.time_consuming = (data.res_time - data.req_time) / 1000
                 this.table.push(event.data)
             },
