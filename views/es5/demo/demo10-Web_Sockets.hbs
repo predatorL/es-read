@@ -1,24 +1,92 @@
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-y: auto;
+    }
+
+    #chat {
+        min-height: 600px;
+        width: 600px;
+        margin: 0 auto;
+        height: 100vh;
+        overflow: hidden;
+        background-color: #EEEEEE;
+        box-shadow: 0 0 5px rgba(3, 3, 3, 0.6);
+    }
+
+    #title {
+        height: 30px;
+        box-sizing: border-box;
+        border-bottom: 1px solid rgba(3, 3, 3, 0.1);
+        line-height: 30px;
+        text-indent: 15px;
+        text-overflow: ellipsis;
+    }
+
+    #footer {
+        height: 130px;
+        box-sizing: border-box;
+        border-top: 1px solid rgba(3, 3, 3, 0.1);
+    }
+
+    #footer .toolbar {
+        height: 18px;
+    }
+
+    #footer .edit-area {
+        height: 80px;
+        width: 99%;
+        box-sizing: border-box;
+        margin: 0 auto;
+        padding: 2px 5px;
+        overflow-y: auto;
+    }
+
+    #footer .action {
+        height: 30px;
+        padding-right: 10px;
+        text-align: right;
+    }
+
+    #article {
+        height: calc(100% - 160px);
+        overflow-y: auto;
+    }
+</style>
 <template class="template">
-    <el-row :gutter="20">
-        <el-col :span="12">
+    <section id="chat">
+        <header id="title">
+            本地聊天测试
+        </header>
+        <article id="article">
 
-        </el-col>
-        <el-col :span="12">
-
-        </el-col>
-    </el-row>
+        </article>
+        <footer id="footer">
+            <div class="toolbar"></div>
+            <div class="edit-area" contenteditable="true">
+            </div>
+            <div class="action">
+                <el-button size="mini" @click="onSubmit">发送</el-button>
+            </div>
+        </footer>
+    </section>
 </template>
 <script>
+    // TODO: div 可编辑　消蓝框　
     new Vue({
         el: '#app',
         template: $('.template').innerHTML,
         methods: {
+            onListen() {
+
+            },
             onSubmit() {
                 this.worker.postMessage(this.form)
             }
         },
         mounted() {
-            // const socket = new WebSocket("ws://127.0.0.1:3041/demo/es5/worker/test1.js");
+            // const socket = new WebSocket("ws://127.0.0.1:3041");
         },
         data() {
             return {
