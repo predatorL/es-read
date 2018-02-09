@@ -54,6 +54,7 @@
         overflow-y: auto;
     }
 </style>
+<script src="/lib/socket.io/socket.io.js"></script>
 <template class="template">
     <section id="chat">
         <header id="title">
@@ -86,7 +87,11 @@
             }
         },
         mounted() {
-            // const socket = new WebSocket("ws://127.0.0.1:3041");
+            var socket = io.connect('http://127.0.0.1:8091');
+            socket.on('news', function (data) {
+                console.log(data);
+                socket.emit('my other event', { my: 'data' });
+            });
         },
         data() {
             return {
