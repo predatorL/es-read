@@ -1,0 +1,42 @@
+<pre>
+    <code></code>
+</pre>
+<style>
+    .content {
+        display: inline-block;
+        height: 150px;
+        width: 260px;
+        margin-left: 30px;
+        box-shadow: 0 0 2px #333;
+        overflow-y: auto;
+    }
+</style>
+<div>
+    <button onclick="d1.saySth()">saySth</button>
+    <textarea name="" id="text" cols="30" rows="10"></textarea>
+    <div class="content"></div>
+</div>
+<script id="script">
+    // 定义
+    class Point {
+        constructor(x, y) {
+            this.x = x
+            this.y = y
+        }
+        toString() {
+            return `(${this.x}, ${this.y})`
+        }
+
+    }
+    let d1 = new Point()
+    // 使用assign添加新方法
+    Object.assign(Point.prototype, {
+        saySth() {
+            $('.content').innerText = $('#text').value
+        }
+    })
+    d1 instanceof Point
+</script>
+<script>
+    __Utils.mountCode('pre code', '#script')
+</script>

@@ -36,12 +36,8 @@ let catalog = [
         page: 'set-map'
     },
     {
-        name: 'Proxy(doing)',
-        page: 'proxy'
-    },
-    {
-        name: 'Reflect',
-        page: 'reflect'
+        name: 'Proxy(doing) Reflect',
+        page: 'Proxy_Reflect'
     },
     {
         name: 'Promise 对象',
@@ -52,24 +48,16 @@ let catalog = [
         page: 'iterator'
     },
     {
-        name: 'Generator 函数的语法',
+        name: 'Generator 函数的语法、异步应用',
         page: 'generator'
-    },
-    {
-        name: 'Generator 函数的异步应用',
-        page: 'generator-async'
     },
     {
         name: 'async 函数',
         page: 'async'
     },
     {
-        name: 'Class 的基本语法',
+        name: 'Class 的基本语法、继承',
         page: 'class'
-    },
-    {
-        name: 'Class 的继承',
-        page: 'class-extends'
     },
     {
         name: 'Decorator',
@@ -86,14 +74,6 @@ let catalog = [
     {
         name: 'ArrayBuffer',
         page: 'arraybuffer'
-    },
-    {
-        name: '编程风格',
-        page: 'style'
-    },
-    {
-        name: '读懂规格',
-        page: 'spec'
     }
 ]
 
