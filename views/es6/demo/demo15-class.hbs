@@ -35,7 +35,60 @@
             $('.content').innerText = $('#text').value
         }
     })
-    d1 instanceof Point
+    // d1 实例化于　Point => true
+    console.log(d1 instanceof Point)
+    // 表达式声明
+    const class1 = class Me { }
+    console.log(class1.name) // 'Me'
+    const class2 = class { }
+    console.log(class2.name) // 'class2'
+    // class 不存在变量提升，　先定义
+    {
+        let class3 = class { }
+        class b1 extends class3 { } // 外部无法访问b1
+    }
+
+    // ***继承***
+    const delay = () => {
+        return new Promise(function (resolve, reject) {
+            setTimeout(() => {
+                resolve()
+            }, 2000)
+        })
+    }
+    const class4 = class {
+        constructor(x, y) {
+            this.x = x
+            this.y = y
+        }
+        async delayFn(xx) {
+            const person = await delay().then(() => {
+                return { name: xx || 'test' }
+            })
+            console.log('person', person)
+            return false
+        }
+    }
+    const b1_c4 = class extends class4 { }
+    const b2_c4 = class extends class4 {
+        constructor(y) {
+            super()
+            this.y = y
+        }
+    }
+    const b3_c4 = class extends class4 {
+        constructor() {
+            this.y = y
+        }
+    }
+
+    try {
+        var ins_b1_c4 = new b1_c4() // 如果没有constructor, 会默认添加以个调用super的constructor
+        var ins_b2_c4 = new b2_c4() // 如果有constructor、super, super会帮你继承父类的this对象，　而且super必须得在this之前
+        var ins_b3_c4 = new b3_c4() // 如果有constructor、无super, 会导致子类，，没有this对象，　new的时候直接就报错了
+    } catch (err) {
+        console.log(err)
+    }
 </script>
 <script>
     __Utils.mountCode('pre code', '#script')
