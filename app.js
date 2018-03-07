@@ -1,8 +1,11 @@
+// lib
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+//
 var bodyParser = require('body-parser');
 
 
@@ -20,13 +23,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function(req, res, next) {
-  res.render('index', {
-      title: 'es-read'
-  });
-})
-app.use('/pages/es6', require('./routes/es6'));
-app.use('/pages/es5', require('./routes/es5'));
+// mount route
+app.use('/', require('./routes/index'));
+
+// mount chat-server
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
