@@ -74,6 +74,37 @@
     </section>
 </template>
 <script>
+    class Chat {
+        constructor(socket) {
+            this.socket = socket
+        }
+        sendMessage(room, text) {
+            this.socket.emit('message', {
+                room,
+                text
+            })
+        }
+        changeRoom(newRoom) {
+            this.socket.emit('join',{
+                newRoom
+            })
+        }
+        processCommand (commandStr) {
+            const words = commandStr.trim().split(' ')
+            const command = words[0].substr().toLowerCase()
+            let message = false
+            const info = words.slice(1).join(' ')
+            switch(command) {
+                case 'join':
+                this.changeRoom(info)
+                case 'nick':
+                this.socket.emit('newAttempt', info)
+                default:
+                message = '无法识别的命令'
+            }
+            return message
+        }
+    }
     // TODO: div 可编辑　消蓝框　
     new Vue({
         el: '#app',
