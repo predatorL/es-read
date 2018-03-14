@@ -105,20 +105,26 @@
             return message
         }
     }
+
     // TODO: div 可编辑　消蓝框　
     new Vue({
         el: '#app',
         template: $('.template').innerHTML,
         methods: {
+            processUserInput() {
+
+            },
             onListen() {
 
             },
             onSubmit() {
+                const result = this.processUserInput()
+
                 this.worker.postMessage(this.form)
             }
         },
         mounted() {
-            var socket = io.connect('http://127.0.0.1:8091');
+            var socket = io.connect('http://127.0.0.1:3042');
             socket.on('news', function (data) {
                 console.log(data);
                 socket.emit('my other event', { my: 'data' });
