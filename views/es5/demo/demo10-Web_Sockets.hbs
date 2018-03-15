@@ -118,17 +118,23 @@
 
             },
             onSubmit() {
-                const result = this.processUserInput()
-
-                this.worker.postMessage(this.form)
             }
         },
         mounted() {
             var socket = io.connect('http://127.0.0.1:3042');
-            socket.on('news', function (data) {
-                console.log(data);
-                socket.emit('my other event', { my: 'data' });
+            socket.on('nameResult', (data) => {
+                console.log('nameResult', data);
+                this.$message('分配了个名叫: ',data.name)
             });
+            socket.on('joinResult', (data) => {
+                console.log('joinResult', data);
+                // this.$message(JSON.stringify(data))
+            });
+            socket.on('message', (data) => {
+                console.log('message', data);
+                // this.$message(JSON.stringify(data))
+            });
+
         },
         data() {
             return {

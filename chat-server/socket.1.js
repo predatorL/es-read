@@ -1,5 +1,4 @@
 const socketIo = require('socket.io')
-const colors = require('colors')
 
 class InitSocket {
     constructor() {
@@ -7,71 +6,16 @@ class InitSocket {
         this.io = null
         this.nickNames = {}
         this.namesUsed = []
-        this.currentRoom = {}
-    }
-
-    assignGuestName(socket) {
-        const name = 'Guest' + this.guestNumber
-        console.log('assignGuestName:'.green, name.blue)
-        this.nickNames[socket.id] = name
-        socket.emit('nameResult', {
-            success: true,
-            name
-        })
-        this.namesUsed.push(name)
-        this.guestNumber += 1
-    }
-
-    joinRoom(socket, room) {
-        const { nickNames, io } = this
-        socket.join(room)
-        this.currentRoom[socket.id] = room
-        // 返回结果
-        socket.emit('joinResult', { room })
-        // 向所有人广播有人加入
-        socket.broadcast.to(room).emit('message', {
-            text: [nickNames[socket.id], ' has joined ', room, ' .'].join('')
-        })
-        const usersInRoom = io.serveClient(room)
-        console.log('usersInRoom', usersInRoom.length, io.sockets)
-        return
-        if (usersInRoom.length < 1) {
-            return
-        }
-        let tempMsg = `Users cuurently in ${room}: `
-        const otherUsers = usersInRoom.filter(item => {
-            return usersInRoom[index].id !== socket.id
-        })
-        // for (let index in usersInRoom) {
-        //     const userSocketId = usersInRoom[index].id
-        //     if (userSocketId != socket.id) {
-        //         if (index > 0) {
-        //             tempMsg += ', '
-        //         }
-        //         tempMsg += nickNames[userSocketId]
-        //     }
-        // }
-        // tempMsg += '.'
-        // socket.emit('message', { text: tempMsg })
+        this.currRoom = {}
     }
 
     handleConnection(socket) {
-        const { io, guestNumber } = this
-        this.assignGuestName(socket)
-        this.joinRoom(socket, 'Lobby')
-        // handleMessageBroadcasting(socket, nickNames)
-        // handleNameChangeAttempts(socket, nickNames, namesUsed)
-        // handleRoomJoining(socket)
-        // socket.on('rooms', () => {
-        //     socket.emit('rooms', io.sockets.manageer.rooms)
-        // })
+        console.log('a user connected')
     }
 
     listen(server) {
         this.io = socketIo(server)
-        this.io.on('connection', socket => {
-            this.handleConnection(socket)
-        })
+        this.io.on('connection', this.handleConnection)
     }
 }
 
@@ -85,6 +29,17 @@ module.exports = function() {
 // const nickNames = {}
 // const namesUsed = []
 // const currentRoom = {}
+
+// const assignGuestName = (socket, guestNumber, nickNames, namesUsed) => {
+//     const name = 'Guest' + guestNumber
+//     nickNames[socket.id] = name
+//     socket.emit('nameResult', {
+//         success: true,
+//         name
+//     })
+//     namesUsed.push(name)
+//     return guestNumber + 1
+// }
 
 // const joinRoom = (socket, room) => {
 //     socket.join(room)
@@ -161,6 +116,17 @@ module.exports = function() {
 //         const nameIndex = namesUsed.indexOf(nickNames[socket.id])
 //         delete namesUsed[nameIndex]
 //         delete nickNames[socket.id]
+//     })
+// }
+
+// const handleConnection = socket => {
+//     guestNumber = assignGuestName(socket, guestNumber, nickNames, namesUsed)
+//     joinRoom(socket, 'Lobby')
+//     handleMessageBroadcasting(socket, nickNames)
+//     handleNameChangeAttempts(socket, nickNames, namesUsed)
+//     handleRoomJoining(socket)
+//     socket.on('rooms', () => {
+//         socket.emit('rooms', io.sockets.manageer.rooms)
 //     })
 // }
 
