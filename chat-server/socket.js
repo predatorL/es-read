@@ -32,11 +32,13 @@ class InitSocket {
         socket.broadcast.to(room).emit('message', {
             text: [nickNames[socket.id], ' has joined ', room, ' .'].join('')
         })
-        console.log('io.sockets'.red, Object.keys(io.sockets))
-        console.log('io.sockets.rooms'.red, io.sockets.rooms)
-        console.log('io.sockets.connected'.red, Object.keys(io.sockets.connected))
-        console.log('io.sockets.sockets'.red, Object.keys(io.sockets.sockets))
-        console.log('io.sockets.ids'.red, io.sockets.ids, Object.keys(io.sockets.ids))
+        // console.log('io.sockets'.red, Object.keys(io.sockets))
+        // console.log('io.sockets.rooms'.red, io.sockets.rooms)
+        // console.log('io.sockets.connected'.red, Object.keys(io.sockets.connected))
+        // console.log('io.sockets.sockets'.red, Object.keys(io.sockets.sockets))
+        // console.log('io.sockets.ids'.red, io.sockets.ids, Object.keys(io.sockets.ids))
+        console.log('socket'.red, Object.keys(socket))
+        console.log('socket.client'.red, Object.keys(socket.client))
         // socket.emit('joinResult', JSON.stringify(io.sockets))
         return
         const usersInRoom = io.sockets(room)
