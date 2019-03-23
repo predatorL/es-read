@@ -1,175 +1,138 @@
+'use strict';
 const socketIo = require('socket.io')
-const colors = require('colors')
 
 class InitSocket {
     constructor() {
-        this.guestNumber = 1
+        this.guestNumber = 0;
+        this.roomName = 'test1';
+        // 用于用户的ip，防止多窗口登录
+        this.ipPool = new Set();
+        this.ipMap = new Map();
         this.io = null
         this.nickNames = {}
-        this.namesUsed = []
+        this.namesUsed = [];
         this.currentRoom = {}
     }
-
-    assignGuestName(socket) {
-        const name = 'Guest' + this.guestNumber
-        console.log('assignGuestName:'.green, name.blue)
-        this.nickNames[socket.id] = name
-        socket.emit('nameResult', {
-            success: true,
-            name
-        })
-        this.namesUsed.push(name)
-        this.guestNumber += 1
-    }
-
-    joinRoom(socket, room) {
-        const { nickNames, io } = this
-        socket.join(room)
-        this.currentRoom[socket.id] = room
-        // 返回结果
-        socket.emit('joinResult', { room })
-        // 向所有人广播有人加入
-        socket.broadcast.to(room).emit('message', {
-            text: [nickNames[socket.id], ' has joined ', room, ' .'].join('')
-        })
-        // console.log('io.sockets'.red, Object.keys(io.sockets))
-        // console.log('io.sockets.rooms'.red, io.sockets.rooms)
-        // console.log('io.sockets.connected'.red, Object.keys(io.sockets.connected))
-        // console.log('io.sockets.sockets'.red, Object.keys(io.sockets.sockets))
-        // console.log('io.sockets.ids'.red, io.sockets.ids, Object.keys(io.sockets.ids))
-        console.log('socket'.red, Object.keys(socket))
-        console.log('socket.client'.red, Object.keys(socket.client))
-        // socket.emit('joinResult', JSON.stringify(io.sockets))
-        return
-        const usersInRoom = io.sockets(room)
-        console.log('usersInRoom', usersInRoom.length)
-        if (usersInRoom.length < 1) {
-            return
+    /**
+     * @fn 获取房间信息
+     */
+    getRoomInfo() {
+        return {
+            count: this.ipPool.size,
         }
-        let tempMsg = `Users cuurently in ${room}: `
-        const otherUsers = usersInRoom.filter(item => {
-            return usersInRoom[index].id !== socket.id
-        })
-        // for (let index in usersInRoom) {
-        //     const userSocketId = usersInRoom[index].id
-        //     if (userSocketId != socket.id) {
-        //         if (index > 0) {
-        //             tempMsg += ', '
-        //         }
-        //         tempMsg += nickNames[userSocketId]
-        //     }
-        // }
-        // tempMsg += '.'
-        // socket.emit('message', { text: tempMsg })
+    }
+    /**
+     * @fn 获取用户信息
+     */
+    getUserInfo(socket) {
+        const {address} = socket.handshake;
+        return this.ipMap.get(address);
+    }
+    /**
+     * @fn 新用户加入房间
+     */
+    joinRoom(socket, address) {
+        this.ipPool.add(address);
+        let name = address.substr(7);
+        // ip对应名字
+        this.ipMap.set(address, {
+            name
+        });
+        // 加入房间
+        socket.join(this.roomName);
+        // 通知其他用户有人加入
+        socket.broadcast.to(this.roomName).emit('message', {
+            type: 'broadcast',
+            text: `用户: ${name} 加入房间`
+        });
+        // 通知其他用户房间信息变更
+        socket.broadcast.to(this.roomName).emit('room-info', {
+            type: 'common',
+            data: Object.assign({}, this.getRoomInfo())
+        });
+        // 返回登录信息
+        socket.emit('system', {
+            message: '您已经登录',
+            status: 200,
+            type: 'login',
+            data: {
+                name,
+                room: Object.assign({}, this.getRoomInfo())
+            }
+        });
     }
 
-    handleConnection(socket) {
-        const { io, guestNumber } = this
-        this.assignGuestName(socket)
-        this.joinRoom(socket, 'Lobby')
-        // handleMessageBroadcasting(socket, nickNames)
-        // handleNameChangeAttempts(socket, nickNames, namesUsed)
-        // handleRoomJoining(socket)
-        // socket.on('rooms', () => {
-        //     socket.emit('rooms', io.sockets.manageer.rooms)
-        // })
+    /**
+     * @fn 用户断开连接
+     * @param {*} address
+     * @param {*} reason
+     */
+    userDisconnect(address, reason) {
+        // console.log('userDisconnect', address, reason);
+        let person = this.ipMap.get(address);
+        this.ipPool.delete(address);
+        this.ipMap.delete(address);
+        // 通知其他用户有人加入
+        this.io.to(this.roomName).emit('message', {
+            type: 'broadcast',
+            text: `用户: ${person.name} 离开房间`
+        });
+        // 通知其他用户房间信息变更
+        this.io.to(this.roomName).emit('room-info', {
+            type: 'common',
+            data: Object.assign({}, this.getRoomInfo())
+        });
+    }
+    /**
+     * @fn 用户链接处理
+     * @param {*} socket
+     */
+    handleConnection (socket) {
+        let {address} = socket.handshake;
+        let hasContect = this.ipPool.has(address);
+        // console.log(this.ipPool, address, hasContect)
+        // 检测是否登录
+        if(hasContect) {
+            socket.emit('system', {
+                message: '您已经登录, 暂不支持多点访问',
+                status: 5001,
+                type: 'login',
+            });
+            setTimeout(() => {
+                socket.disconnect(true);
+            }, 10000);
+        } else {
+            this.joinRoom(socket, address);
+            // 用户失联处理
+            socket.on('disconnect',  this.userDisconnect.bind(this, address));
+            // 发信息处理
+            socket.on('message', this.handleMsg.bind(this, socket));
+        }
+
+    }
+
+    handleMsg(socket,  msg) {
+        console.log('handleMsg', 'socket', msg);
+        const person = this.getUserInfo(socket);
+        if(msg.trim() === '') {
+            return;
+        }
+        socket.broadcast.to(this.roomName).emit('message', {
+            type: 'common',
+            data: {
+                name: person.name,
+                text: msg
+            }
+        });
     }
 
     listen(server) {
         this.io = socketIo(server)
-        this.io.on('connection', socket => {
-            this.handleConnection(socket)
-        })
+        this.io.on('connection', this.handleConnection.bind(this));
     }
 }
 
 module.exports = function() {
-    const temp = new InitSocket()
-    return temp
+    return new InitSocket()
 }
 
-// let io = null
-// let guestNumber = 1
-// const nickNames = {}
-// const namesUsed = []
-// const currentRoom = {}
-
-// const joinRoom = (socket, room) => {
-//     socket.join(room)
-//     currentRoom[socket.id] = room
-//     socket.emit('joinResult', {room})
-//     socket.broadcast.to(room).emit('message', {
-//         text: [nickNames[socket.id],' has joined ', room, ' .'].join('')
-//     })
-//     const usersInRoom = io.sockets.cilents(room)
-//     if(usersInRoom.length > 1) {
-//         let usersInRoomSummary = ['Users cuurently in', room, ':']
-//         for(let index in usersInRoom) {
-//             const userSocketId = usersInRoom[index].id
-//             if(userSocketId != socket.id) {
-//                 if(index > 0) {
-//                     usersInRoomSummary.push(', ')
-//                 }
-//                 usersInRoomSummary.push(nickNames[userSocketId])
-//             }
-//         }
-//         usersInRoomSummary.push('.')
-//         socket.emit('message', {text: usersInRoomSummary.join('')})
-//     }
-// }
-
-// const handleNameChangeAttempts = (socket, nickNames, namesUsed) => {
-//     socket.on('nameAttempt', (name) => {
-//         if(name.indexOf('Guest') === 0) {
-//             socket.emit('nameResult', {
-//                 success: false,
-//                 message: '名称不能以Guest开头'
-//             })
-//             return
-//         }
-//         if(namesUsed.indexOf(name) === -1) {
-//             const previousName = nickNames[socket.id]
-//             const previousNameIndex = namesUsed.indexOf(previousName)
-//             namesUsed.push(name)
-//             nickNames[socket.id] = name
-//             delete namesUsed[previousNameIndex]
-//             socket.emit('nameResult', {
-//                 success: true,
-//                 name
-//             })
-//             socket.broadcast.to(currentRoom[socket.id]).eimt('message', {
-//                 text: previousName + ' is now known as ' + name + '.'
-//             })
-//             return
-//         }
-//         socket.emit('nameResult', {
-//             success: false,
-//             message: 'That name is already in use.'
-//         })
-//     })
-// }
-
-// const handleMessageBroadcasting = (socket) => {
-//     socket.on('message', (message) => {
-//         socket.broadcast.to(message.room).emit('message', {
-//             text: nickNames[socket.id] + ': ' + message.text
-//         })
-//     })
-// }
-
-// const handleRoomJoining = (socket) => {
-//     socket.on('join', (room) => {
-//         socket.leave(currentRoom[socket.id])
-//         joinRoom(socket, room.newRoom)
-//     })
-// }
-
-// const handleCilentDisconnection = (socket) => {
-//     socket.on('disconnect', () => {
-//         const nameIndex = namesUsed.indexOf(nickNames[socket.id])
-//         delete namesUsed[nameIndex]
-//         delete nickNames[socket.id]
-//     })
-// }
-
-// module.exports = listen
