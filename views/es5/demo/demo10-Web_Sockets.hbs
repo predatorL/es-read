@@ -201,7 +201,7 @@
             }
         },
         mounted() {
-            const tempSocket = io.connect('http://10.1.13.105:3042')
+            const tempSocket = io.connect('http://127.0.0.1:3042')
             this.setChatEventListen(tempSocket)
             this.chatIns = tempSocket
         },
